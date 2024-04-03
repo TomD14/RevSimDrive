@@ -13,35 +13,41 @@ public class SimpleOrientationCopy : MonoBehaviour
     */
     YawController yawController; // reference to YawController
     MotionCompensation motionCompensation;
+    public SampleYawControllerDelegateImplementation sampleYawControllerDelegateImplementation;
 
-    private void Start() {
+    private void Start()
+    {
         yawController = YawController.Instance();
         motionCompensation = yawController.gameObject.GetComponent<MotionCompensation>();
     }
-    private void FixedUpdate() 
+    private void FixedUpdate()
     {
-        if (motionCompensation?.GetDevice() == MotionCompensation.enumYawPitchRollDevice.YawVRController)
+        if (sampleYawControllerDelegateImplementation.swapYawVO == true)
         {
-            yawController.TrackerObject.SetRotation(transform.localEulerAngles);
-        }
-        else if (motionCompensation?.GetDevice() == MotionCompensation.enumYawPitchRollDevice.LeftController
-              || motionCompensation?.GetDevice() == MotionCompensation.enumYawPitchRollDevice.RightController) 
-        {
-            Vector3 eulerAngles = new Vector3();
+            if (motionCompensation?.GetDevice() == MotionCompensation.enumYawPitchRollDevice.YawVRController)
+            {
+                yawController.TrackerObject.SetRotation(transform.localEulerAngles);
+            }
+            else if (motionCompensation?.GetDevice() == MotionCompensation.enumYawPitchRollDevice.LeftController
+                  || motionCompensation?.GetDevice() == MotionCompensation.enumYawPitchRollDevice.RightController)
+            {
+                Vector3 eulerAngles = new Vector3();
 
-            try
-            {
-                eulerAngles = motionCompensation.GetOpenXRControllerTransform().localEulerAngles;
-            }
-            catch (Exception ex) 
-            {
-                ex.ToString();
-            }
+                try
+                {
+                    eulerAngles = motionCompensation.GetOpenXRControllerTransform().localEulerAngles;
+                }
+                catch (Exception ex)
+                {
+                    ex.ToString();
+                }
 
-            if (null != eulerAngles) 
-            {
-                yawController.TrackerObject.SetRotation(eulerAngles);
+                if (null != eulerAngles)
+                {
+                    yawController.TrackerObject.SetRotation(eulerAngles);
+                }
             }
         }
+
     }
 }
