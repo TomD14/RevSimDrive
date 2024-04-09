@@ -16,10 +16,9 @@ public class CarController : MonoBehaviour
     private bool isBreaking;
 
     [Header("Force controls")]
-    [SerializeField] private float motorForce;
+    [SerializeField] public float motorForce;
     [SerializeField] private float breakForce;
     [SerializeField] private float maxSteerAngle;
-    [SerializeField] private Slider speedSlider;
 
     [Header("Wheels")]
     [SerializeField] private WheelCollider frontLeftWheelCollider;
@@ -42,7 +41,6 @@ public class CarController : MonoBehaviour
             GetComponent<Rigidbody>().centerOfMass = centerOfMass.localPosition;
         }
 
-        speedSlider.value = motorForce;
     }
 
     private void FixedUpdate()
@@ -61,10 +59,6 @@ public class CarController : MonoBehaviour
         isBreaking = Input.GetKey(KeyCode.Space);
     }
 
-    public void UpdateForce()
-    {
-        motorForce = speedSlider.value;
-    }
 
     private void HandleMotor()
     {
@@ -102,8 +96,8 @@ public class CarController : MonoBehaviour
     private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
     {
         Vector3 pos;
-        Quaternion rot
-; wheelCollider.GetWorldPose(out pos, out rot);
+        Quaternion rot;       
+        wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
     }
