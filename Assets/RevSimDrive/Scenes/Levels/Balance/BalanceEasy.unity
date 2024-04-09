@@ -196,6 +196,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2398173174998351360, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
+      propertyPath: carPlayer
+      value: 
+      objectReference: {fileID: 1960800452}
     - target: {fileID: 3897423009374872403, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -355,28 +359,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &1645922485 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7200739277760766874, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
-  m_PrefabInstance: {fileID: 1960800451}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1645922490
+--- !u!114 &1016823556 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2398173174998351360, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
+  m_PrefabInstance: {fileID: 516170132}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1645922485}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ceb91d6f2bc9f841afcc858984a705e, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e171e5c138054d3095739f6c80d5fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xAxis: 0
-  GasInput: 0
-  BreakInput: 0
-  ClutchInput: 0
-  CurrentGear: 0
 --- !u!1001 &1960800451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -385,6 +378,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5588730875264076760, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
+      propertyPath: sampleYawControllerDelegateImplementation
+      value: 
+      objectReference: {fileID: 1016823556}
+    - target: {fileID: 6789647564338891824, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
+      propertyPath: sampleYawControllerDelegateImplementation
+      value: 
+      objectReference: {fileID: 1016823556}
     - target: {fileID: 7200739277760766874, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
       propertyPath: m_Name
       value: CarPlayer
@@ -448,11 +449,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7200739277760766874, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1645922490}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
+--- !u!114 &1960800452 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5921787659592466407, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
+  m_PrefabInstance: {fileID: 1960800451}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed3dacc0cf3f2749a06c1395810f6a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
