@@ -36,6 +36,8 @@ namespace YawVR
         private Slider rollSlider;
         [SerializeField]
         private Slider pitchSlider;
+        [SerializeField]
+        private Slider speedSlider;
 
         //DeviceDiscovery deviceDiscovery = new DeviceDiscovery();
         private int? udpPort = 50010;
@@ -57,6 +59,8 @@ namespace YawVR
         [SerializeField]
         private TextMeshProUGUI swapVOButtonText;
         public bool swapYawVO = false;
+
+        public CarController carPlayer;
 
 
         void Start()
@@ -86,6 +90,8 @@ namespace YawVR
 
             //Start seacrhing for devices
             //StartCoroutine(SearchForDevices());
+
+            speedSlider.value = carPlayer.motorForce;
         }
 
 
@@ -298,6 +304,11 @@ namespace YawVR
         public void ControllerStateChanged(ControllerState state)
         {
             RefreshLayout(state);
+        }
+
+        public void ChangeCarSpeed()
+        {
+            carPlayer.motorForce = speedSlider.value;
         }
 
         public void ChangePitchIntensity()
