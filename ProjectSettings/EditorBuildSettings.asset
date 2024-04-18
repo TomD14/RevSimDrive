@@ -9,8 +9,35 @@ EditorBuildSettings:
     path: Assets/RevSimDrive/Scenes/MainMenu.unity
     guid: 9f643982950e0ee45b45afefe773a6ff
   - enabled: 1
+    path: Assets/RevSimDrive/Scenes/Levels/Balance/BalanceEasy.unity
+    guid: c55b4c17de0c0864ca1aea6ff16cb4b4
+  - enabled: 1
+    path: Assets/RevSimDrive/Scenes/Levels/Balance/BalanceMedium.unity
+    guid: 0615c68b1f5538342b1f726d0fb8d1e8
+  - enabled: 1
+    path: Assets/RevSimDrive/Scenes/Levels/Balance/BalanceHard.unity
+    guid: f88773b584ca9cb458625c72f9e1a20b
+  - enabled: 1
+    path: Assets/RevSimDrive/Scenes/Levels/Balance/BalanceHard2.unity
+    guid: 04df9f1cf51b8f84d9385569d7bd4c7e
+  - enabled: 1
+    path: Assets/RevSimDrive/Scenes/Levels/MotorFunction/MotorFunctionEasy.unity
+    guid: fdd8927feaf1b794aa527b94479e5fec
+  - enabled: 1
+    path: Assets/RevSimDrive/Scenes/Levels/MotorFunction/MotorFunctionMedium.unity
+    guid: 1c2bc813e9f61504db6dd3342c181485
+  - enabled: 1
+    path: Assets/RevSimDrive/Scenes/Levels/MotorFunction/MotorFunctionHard.unity
+    guid: 04ac19218a81c214db309c6c83ce5180
+  - enabled: 1
     path: Assets/RevSimDrive/Scenes/Levels/ReactionDecision/ReactionDecisionEasy.unity
     guid: a4148abdc14d360419b27ed451635175
+  - enabled: 1
+    path: Assets/RevSimDrive/Scenes/Levels/ReactionDecision/ReactionDecisionMedium.unity
+    guid: 2328f6fd156869948828c9b079b03ebb
+  - enabled: 1
+    path: Assets/RevSimDrive/Scenes/Levels/ReactionDecision/ReactionDecisionHard.unity
+    guid: 0c403fb334d366c4985099930265bea2
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 9e70f3f0ec0ac51468dc13cd6ae8fcd2, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 42ef0fc82414b874aabd1f23e1f777f0, type: 2}
