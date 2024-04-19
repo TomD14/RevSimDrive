@@ -22,8 +22,6 @@ public class SimpleOrientationCopy : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (sampleYawControllerDelegateImplementation.swapYawVO == true)
-        {
             if (motionCompensation?.GetDevice() == MotionCompensation.enumYawPitchRollDevice.YawVRController)
             {
                 yawController.TrackerObject.SetRotation(transform.localEulerAngles);
@@ -47,7 +45,5 @@ public class SimpleOrientationCopy : MonoBehaviour
                     yawController.TrackerObject.SetRotation(eulerAngles);
                 }
             }
-        }
-
     }
 }

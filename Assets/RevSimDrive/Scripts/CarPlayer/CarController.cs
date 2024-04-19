@@ -11,6 +11,7 @@ public class CarController : MonoBehaviour
 
     private float horizontalInput;
     private float verticalInput;
+    private float brakeInput;
     private float currentSteerAngle;
     private float currentbreakForce;
     private bool isBreaking;
@@ -19,6 +20,9 @@ public class CarController : MonoBehaviour
     [SerializeField] public float motorForce;
     [SerializeField] private float breakForce;
     [SerializeField] private float maxSteerAngle;
+
+    [SerializeField] public float Speed;
+    [SerializeField] public float Braking;
 
     [Header("Wheels")]
     [SerializeField] private WheelCollider frontLeftWheelCollider;
@@ -55,8 +59,19 @@ public class CarController : MonoBehaviour
     private void GetInput()
     {
         horizontalInput = Input.GetAxis(HORIZONTAL);
-        verticalInput = Input.GetAxis(VERTICAL);
-        isBreaking = Input.GetKey(KeyCode.Space);
+        verticalInput = (Input.GetAxis(VERTICAL) + 1) * 0.5f;
+        brakeInput = (Input.GetAxis("Brake") + 1) * 0.5f;
+
+        Speed = verticalInput;
+        Braking = brakeInput;
+
+
+
+        if(brakeInput > 0)
+        {
+            isBreaking = true;
+        }
+        else{ isBreaking = false; }
     }
 
 

@@ -34,8 +34,6 @@ public class VelocityController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (sampleYawControllerDelegateImplementation.swapYawVO == false)
-        {
             //float x, y, z;
             Vector3 vel = transform.InverseTransformVector(rigid.velocity);
 
@@ -46,7 +44,6 @@ public class VelocityController : MonoBehaviour
             Vector3 v = new Vector3(vel.z, 0f, vel.x);
 
             yawController.TrackerObject.SetRotation(v);
-        }
 
     }
 

@@ -56,10 +56,6 @@ namespace YawVR
         private List<IPAddress> foundIps = new List<IPAddress>();
         private Coroutine searchCoroutine;
 
-        [SerializeField]
-        private TextMeshProUGUI swapVOButtonText;
-        public bool swapYawVO = false;
-
         public CarController carPlayer;
 
 
@@ -215,20 +211,7 @@ namespace YawVR
             }
         }
 
-        public void SwapVO()
-        {
-            if (swapYawVO == false)
-            {
-                swapYawVO = true;
-                swapVOButtonText.text = "Swap to Velocity";
-
-            }
-            else
-            {
-                swapYawVO = false;
-                swapVOButtonText.text = "Swap to Orientation";
-            }
-        }
+       
 
         void DisconnectButtonPressed()
         {

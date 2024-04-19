@@ -957,7 +957,6 @@ GameObject:
   - component: {fileID: 3049230369055964337}
   - component: {fileID: 5921787659592466407}
   - component: {fileID: 5588730875264076760}
-  - component: {fileID: 6789647564338891824}
   m_Layer: 0
   m_Name: CarPlayer
   m_TagString: Player
@@ -1047,6 +1046,8 @@ MonoBehaviour:
   motorForce: 2000
   breakForce: 9000
   maxSteerAngle: 30
+  Speed: 0
+  Braking: 0
   frontLeftWheelCollider: {fileID: 2803830198880384729}
   frontRightWheelCollider: {fileID: 9199438822612424981}
   rearLeftWheelCollider: {fileID: 5936689604160926999}
@@ -1069,20 +1070,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sampleYawControllerDelegateImplementation: {fileID: 0}
---- !u!114 &6789647564338891824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7200739277760766874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61a344db464344842aaabeec0d8dfdf7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sampleYawControllerDelegateImplementation: {fileID: 0}
-  multiplier: {x: 3, y: 1, z: -2}
 --- !u!1 &7337761273203369165
 GameObject:
   m_ObjectHideFlags: 0
