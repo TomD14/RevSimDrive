@@ -900,7 +900,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ReactionDecisionHard
+          m_StringArgument: MotorFunctionHard
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &643209706
@@ -1046,7 +1046,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ReactionDecisionMedium
+          m_StringArgument: MotorFunctionMedium
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &811687452
@@ -2897,7 +2897,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: BalanceHard
+          m_StringArgument: BalanceHard2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1951768147
@@ -3181,7 +3181,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ReactionDecisionEasy
+          m_StringArgument: MotorFunctionEasy
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2093454704
