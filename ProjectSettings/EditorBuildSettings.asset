@@ -21,13 +21,13 @@ EditorBuildSettings:
     path: Assets/RevSimDrive/Scenes/Levels/Balance/BalanceHard2.unity
     guid: 04df9f1cf51b8f84d9385569d7bd4c7e
   - enabled: 1
-    path: Assets/RevSimDrive/Scenes/Levels/MotorFunction/MotorFunctionEasy.unity
+    path: Assets/RevSimDrive/Scenes/Levels/MotorFunction/MotorFunctionMedium.unity
     guid: fdd8927feaf1b794aa527b94479e5fec
   - enabled: 1
-    path: Assets/RevSimDrive/Scenes/Levels/MotorFunction/MotorFunctionMedium.unity
+    path: Assets/RevSimDrive/Scenes/Levels/MotorFunction/MotorFunctionHard.unity
     guid: 1c2bc813e9f61504db6dd3342c181485
   - enabled: 1
-    path: Assets/RevSimDrive/Scenes/Levels/MotorFunction/MotorFunctionHard.unity
+    path: Assets/RevSimDrive/Scenes/Levels/MotorFunction/MotorFunctionEasy.unity
     guid: 04ac19218a81c214db309c6c83ce5180
   - enabled: 1
     path: Assets/RevSimDrive/Scenes/Levels/ReactionDecision/ReactionDecisionEasy.unity
