@@ -13,14 +13,12 @@ public class PedestrianMovement : MonoBehaviour
     private Transform targetWaypoint;
     private int count = 1;
 
-    // Start is called before the first frame update
     void Start()
     {
         targetWaypoint = waypoints[count].transform;
         transform.LookAt(waypoints[count].transform);
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetWaypoint.position, movespeed * Time.deltaTime);
@@ -40,6 +38,11 @@ public class PedestrianMovement : MonoBehaviour
                 transform.LookAt(waypoints[count].transform);
             }
         }
+
+    }
+
+    private void CrossTheRoad()
+    {
 
     }
 }
