@@ -221,6 +221,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "wizardscode.character": {
+      "version": "https://github.com/TheWizardsCode/Character-Unity-Package.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e40c94168d78b7fa84a0be9d6a35fdc494a74422"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
