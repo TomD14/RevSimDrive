@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,11 +67,6 @@ public class CarController : MonoBehaviour
             verticalInput = (Input.GetAxis("VerticalB") + 1) * 0.5f;
             brakeInput = (Input.GetAxis("Brake") + 1) * 0.5f;
 
-            if (brakeInput > 0)
-            {
-                isBreaking = true;
-            }
-            else { isBreaking = false; }
         }
         else
         {
@@ -92,17 +88,33 @@ public class CarController : MonoBehaviour
         frontRightWheelCollider.motorTorque = verticalInput * motorForce;
         rearLeftWheelCollider.motorTorque = verticalInput * motorForce;
         rearRightWheelCollider.motorTorque = verticalInput * motorForce;
-        currentbreakForce = brakeInput * brakeForce / 1000000000000000;
+        currentbreakForce = brakeInput * brakeForce * 10;
         Braking = currentbreakForce;
         ApplyBreaking();
     }
 
     private void ApplyBreaking()
     {
-        frontRightWheelCollider.brakeTorque = currentbreakForce;
-        frontLeftWheelCollider.brakeTorque = currentbreakForce;
-        rearLeftWheelCollider.brakeTorque = currentbreakForce;
-        rearRightWheelCollider.brakeTorque = currentbreakForce;
+        if (currentbreakForce <= 900)
+        {
+            frontRightWheelCollider.wheelDampingRate = currentbreakForce;
+            frontLeftWheelCollider.wheelDampingRate = currentbreakForce;
+            rearLeftWheelCollider.wheelDampingRate = currentbreakForce;
+            rearRightWheelCollider.wheelDampingRate = currentbreakForce;
+
+            frontRightWheelCollider.brakeTorque = 0;
+            frontLeftWheelCollider.brakeTorque = 0;
+            rearLeftWheelCollider.brakeTorque = 0;
+            rearRightWheelCollider.brakeTorque = 0;
+        }
+        else
+        {
+            frontRightWheelCollider.brakeTorque = 100;
+            frontLeftWheelCollider.brakeTorque = 100;
+            rearLeftWheelCollider.brakeTorque = 100;
+            rearRightWheelCollider.brakeTorque = 100;
+        }
+
     }
 
     private void HandleSteering()

@@ -49,7 +49,7 @@ WheelCollider:
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
   m_Mass: 20
-  m_WheelDampingRate: 0.25
+  m_WheelDampingRate: 2
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
@@ -203,7 +203,7 @@ WheelCollider:
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
   m_Mass: 20
-  m_WheelDampingRate: 0.25
+  m_WheelDampingRate: 2
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
@@ -274,7 +274,7 @@ WheelCollider:
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
   m_Mass: 20
-  m_WheelDampingRate: 0.25
+  m_WheelDampingRate: 2
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
@@ -824,7 +824,6 @@ Transform:
   - {fileID: 4514268800876060728}
   - {fileID: 2329898448962011717}
   - {fileID: 6066612088869041676}
-  - {fileID: 4654721706367759822}
   m_Father: {fileID: 7532410675407165096}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5797269704055854071
@@ -876,7 +875,7 @@ WheelCollider:
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
   m_Mass: 20
-  m_WheelDampingRate: 0.25
+  m_WheelDampingRate: 2
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
@@ -977,6 +976,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 4654721706367759822}
   - {fileID: 7532410675407165096}
   - {fileID: 2219478089935861614}
   - {fileID: 1331187372695313978}
@@ -1046,7 +1046,7 @@ MonoBehaviour:
   usingWheel: 1
   motorForce: 2000
   brakeForce: 100
-  maxSteerAngle: 30
+  maxSteerAngle: 15
   Speed: 0
   Braking: 0
   frontLeftWheelCollider: {fileID: 2803830198880384729}
@@ -1437,7 +1437,7 @@ Transform:
   m_GameObject: {fileID: 7893160204089900057}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.10200001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1445,7 +1445,7 @@ Transform:
   - {fileID: 8082875159758555484}
   - {fileID: 1097564049551631565}
   - {fileID: 2966838763721111779}
-  m_Father: {fileID: 8016174902742684469}
+  m_Father: {fileID: 8566152859944151102}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8150933080133816849
 GameObject:
