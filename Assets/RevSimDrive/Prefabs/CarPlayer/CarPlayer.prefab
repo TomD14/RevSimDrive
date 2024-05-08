@@ -1043,8 +1043,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed3dacc0cf3f2749a06c1395810f6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  usingWheel: 1
   motorForce: 2000
-  breakForce: 9000
+  brakeForce: 100
   maxSteerAngle: 30
   Speed: 0
   Braking: 0

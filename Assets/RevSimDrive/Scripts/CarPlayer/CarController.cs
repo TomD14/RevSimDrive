@@ -15,11 +15,11 @@ public class CarController : MonoBehaviour
     private float currentSteerAngle;
     private float currentbreakForce;
     private bool isBreaking;
-    private bool usingWheel = false;
+    public bool usingWheel = false;
 
     [Header("Force controls")]
     [SerializeField] public float motorForce;
-    [SerializeField] private float breakForce;
+    [SerializeField] private float brakeForce;
     [SerializeField] private float maxSteerAngle;
 
     [SerializeField] public float Speed;
@@ -46,11 +46,6 @@ public class CarController : MonoBehaviour
             GetComponent<Rigidbody>().centerOfMass = centerOfMass.localPosition;
         }
 
-        if(Input.GetAxis(VERTICAL) < 0)
-        {
-            usingWheel = true;
-        }
-
     }
 
     private void FixedUpdate()
@@ -68,7 +63,7 @@ public class CarController : MonoBehaviour
 
         if (usingWheel == true)
         {
-            verticalInput = (Input.GetAxis(VERTICAL) + 1) * 0.5f;
+            verticalInput = (Input.GetAxis("VerticalB") + 1) * 0.5f;
             brakeInput = (Input.GetAxis("Brake") + 1) * 0.5f;
 
             if (brakeInput > 0)
@@ -84,7 +79,6 @@ public class CarController : MonoBehaviour
         }
 
         Speed = verticalInput;
-        Braking = brakeInput;
 
 
 
@@ -98,7 +92,8 @@ public class CarController : MonoBehaviour
         frontRightWheelCollider.motorTorque = verticalInput * motorForce;
         rearLeftWheelCollider.motorTorque = verticalInput * motorForce;
         rearRightWheelCollider.motorTorque = verticalInput * motorForce;
-        currentbreakForce = isBreaking ? breakForce : 0f;
+        currentbreakForce = brakeInput * brakeForce / 1000000000000000;
+        Braking = currentbreakForce;
         ApplyBreaking();
     }
 
