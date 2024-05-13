@@ -12,7 +12,6 @@ public class PedestrianMovement : MonoBehaviour
 
     private Transform targetWaypoint;
     private int count = 1;
-    private bool rotating = false;
 
     void Start()
     {

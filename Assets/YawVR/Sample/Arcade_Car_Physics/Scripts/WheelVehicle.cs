@@ -30,7 +30,6 @@ namespace VehicleBehaviour {
         [SerializeField] string turnInput = "Horizontal";
         [SerializeField] string jumpInput = "Jump";
         [SerializeField] string driftInput = "Drift";
-	    [SerializeField] string boostInput = "Boost";
         
         /* 
          *  Turn input curve: x real input, y value used
