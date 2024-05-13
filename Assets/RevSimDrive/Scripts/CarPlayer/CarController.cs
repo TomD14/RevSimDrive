@@ -72,6 +72,14 @@ public class CarController : MonoBehaviour
         {
             verticalInput = Input.GetAxis(VERTICAL);
             isBreaking = Input.GetKey(KeyCode.Space);
+            if (isBreaking == true)
+            {
+                brakeInput = 1000;
+            }
+            else
+            {
+                brakeInput = 0;
+            }
         }
 
         Speed = verticalInput;
@@ -88,8 +96,14 @@ public class CarController : MonoBehaviour
         frontRightWheelCollider.motorTorque = verticalInput * motorForce;
         rearLeftWheelCollider.motorTorque = verticalInput * motorForce;
         rearRightWheelCollider.motorTorque = verticalInput * motorForce;
-        currentbreakForce = brakeInput * brakeForce * 10;
-        Braking = currentbreakForce;
+        if(usingWheel == true)
+        {
+            currentbreakForce = brakeInput * brakeForce * 10;
+        }
+        else
+        {
+            currentbreakForce = brakeInput;
+        }
         ApplyBreaking();
     }
 
