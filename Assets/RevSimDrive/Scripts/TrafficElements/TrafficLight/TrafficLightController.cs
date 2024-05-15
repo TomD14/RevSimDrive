@@ -4,40 +4,21 @@ using UnityEngine;
 
 public class TrafficLightController : MonoBehaviour
 {
-    public Material green;
-    public Material red;
+    [SerializeField]
+    public float GreenTime;
+    public float YellowTime;
+    public float Cooldown;
+    public float BackToBackCooldown;
 
-    public GameObject light;
-
-    public float changeCountdown = 5f;
-    public float reverseCountdown = 5f;
-
-    private bool traffickStarted = false;
-
+    // Start is called before the first frame update
     void Start()
     {
 
     }
 
-    public void StartColorChange()
+    // Update is called once per frame
+    void Update()
     {
-        if (!traffickStarted)
-        {
-            traffickStarted = true;
-            StartCoroutine(ChangeColorRoutine());
-        }
+        
     }
-
-    IEnumerator ChangeColorRoutine()
-    {
-        yield return new WaitForSeconds(changeCountdown);
-
-        light.GetComponent<Renderer>().material = green;
-
-        yield return new WaitForSeconds(reverseCountdown);
-
-        light.GetComponent<Renderer>().material = red;
-        traffickStarted = false;
-    }
-
 }
