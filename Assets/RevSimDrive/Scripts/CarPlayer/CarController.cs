@@ -16,7 +16,9 @@ public class CarController : MonoBehaviour
     private float currentSteerAngle;
     private float currentbreakForce;
     private bool isBreaking;
+
     public bool usingWheel = false;
+    public float maxRpm = 300;
 
     [Header("Force controls")]
     [SerializeField] public float motorForce;
@@ -70,9 +72,17 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            verticalInput = Input.GetAxis(VERTICAL);
-            isBreaking = Input.GetKey(KeyCode.Space);
-            if (isBreaking == true)
+            
+            if(Input.GetKey(KeyCode.UpArrow) == true)
+            {
+                verticalInput = 1;
+            }
+            else
+            {
+                verticalInput = 0;
+            }
+
+            if (Input.GetKey(KeyCode.Space) == true)
             {
                 brakeInput = 1000;
             }
@@ -82,7 +92,6 @@ public class CarController : MonoBehaviour
             }
         }
 
-        Speed = verticalInput;
 
 
 
@@ -92,10 +101,28 @@ public class CarController : MonoBehaviour
 
     private void HandleMotor()
     {
-        frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
-        frontRightWheelCollider.motorTorque = verticalInput * motorForce;
-        rearLeftWheelCollider.motorTorque = verticalInput * motorForce;
-        rearRightWheelCollider.motorTorque = verticalInput * motorForce;
+        float SpeedOfWheels = transform.GetComponent<Rigidbody>().velocity.sqrMagnitude;
+
+        if (SpeedOfWheels < maxRpm)
+        {
+            frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
+            frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+            rearLeftWheelCollider.motorTorque = verticalInput * motorForce;
+            rearRightWheelCollider.motorTorque = verticalInput * motorForce;
+        }
+        else if (SpeedOfWheels < maxRpm + (maxRpm * 1 / 4))
+        {
+            verticalInput = 0;
+            rearRightWheelCollider.motorTorque = 0;
+            rearLeftWheelCollider.motorTorque = 0;
+            frontRightWheelCollider.motorTorque = 0;
+            frontLeftWheelCollider.motorTorque = 0;
+        }
+        else
+        {
+            ApplyBreaking();
+        }
+
         if(usingWheel == true)
         {
             currentbreakForce = brakeInput * brakeForce * 10;
@@ -105,6 +132,7 @@ public class CarController : MonoBehaviour
             currentbreakForce = brakeInput;
         }
         ApplyBreaking();
+        Speed = SpeedOfWheels;
     }
 
     private void ApplyBreaking()
