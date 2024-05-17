@@ -43,25 +43,25 @@ WheelCollider:
   m_Center: {x: 0, y: 0.15, z: 0}
   m_Radius: 0.5
   m_SuspensionSpring:
-    spring: 120000
-    damper: 12000
+    spring: 500000
+    damper: 50000
     targetPosition: 0.5
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
-  m_Mass: 20
-  m_WheelDampingRate: 2
+  m_Mass: 80
+  m_WheelDampingRate: 500
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 3
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 6
+    m_Stiffness: 5
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -197,25 +197,25 @@ WheelCollider:
   m_Center: {x: 0, y: 0.15, z: 0}
   m_Radius: 0.5
   m_SuspensionSpring:
-    spring: 120000
-    damper: 12000
+    spring: 500000
+    damper: 50000
     targetPosition: 0.5
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
-  m_Mass: 20
-  m_WheelDampingRate: 2
+  m_Mass: 80
+  m_WheelDampingRate: 500
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 3
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 6
+    m_Stiffness: 5
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -268,25 +268,25 @@ WheelCollider:
   m_Center: {x: 0, y: 0.15, z: 0}
   m_Radius: 0.5
   m_SuspensionSpring:
-    spring: 120000
-    damper: 12000
+    spring: 500000
+    damper: 50000
     targetPosition: 0.5
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
-  m_Mass: 20
-  m_WheelDampingRate: 2
+  m_Mass: 80
+  m_WheelDampingRate: 500
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 3
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 7
+    m_Stiffness: 5
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -353,13 +353,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3332396846562072189}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5232379, y: -0, z: -0, w: 0.8521867}
-  m_LocalPosition: {x: -0.4677601, y: 0.80329204, z: 0.5777817}
+  m_LocalRotation: {x: 0, y: -0.70710677, z: -0.70710677, w: 0}
+  m_LocalPosition: {x: -0.46725464, y: 0.7621753, z: 0.617}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7532410675407165096}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: -90, z: -90}
 --- !u!33 &7975208678606226591
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -661,8 +661,8 @@ MonoBehaviour:
   m_Camera: {fileID: 7665395219377500909}
   m_OriginBaseGameObject: {fileID: 3781144271853307541}
   m_CameraFloorOffsetObject: {fileID: 4499973073637899308}
-  m_RequestedTrackingOriginMode: 0
-  m_CameraYOffset: 0
+  m_RequestedTrackingOriginMode: 1
+  m_CameraYOffset: 1.1
 --- !u!114 &6208429578907281157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -869,25 +869,25 @@ WheelCollider:
   m_Center: {x: 0, y: 0.15, z: 0}
   m_Radius: 0.5
   m_SuspensionSpring:
-    spring: 120000
-    damper: 12000
+    spring: 500000
+    damper: 50000
     targetPosition: 0.5
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
-  m_Mass: 20
-  m_WheelDampingRate: 2
+  m_Mass: 80
+  m_WheelDampingRate: 500
   m_ForwardFriction:
     m_ExtremumSlip: 0.4
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 3
+    m_Stiffness: 1
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 7
+    m_Stiffness: 5
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1043,12 +1043,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed3dacc0cf3f2749a06c1395810f6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StandardWheelDampeningRate: 50
   usingWheel: 1
-  motorForce: 2000
+  maxRpm: 300
+  motorForce: 8000
   brakeForce: 100
   maxSteerAngle: 15
   Speed: 0
   Braking: 0
+  SteeringWheel: {fileID: 6096151378293345655}
   frontLeftWheelCollider: {fileID: 2803830198880384729}
   frontRightWheelCollider: {fileID: 9199438822612424981}
   rearLeftWheelCollider: {fileID: 5936689604160926999}

@@ -61,11 +61,13 @@ public class DriverMovement : MonoBehaviour
             }
 
             count++;
+
+            if (count >= waypoints.Count)
+            {
+                Destroy(gameObject);
+            }
         }
-        else if (count >= waypoints.Count)
-        {
-            Destroy(gameObject);
-        }
+
 
 
 

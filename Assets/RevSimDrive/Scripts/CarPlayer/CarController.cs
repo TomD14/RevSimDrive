@@ -17,6 +17,8 @@ public class CarController : MonoBehaviour
     private float currentbreakForce;
     private bool isBreaking;
 
+    public float StandardWheelDampeningRate;
+
     public bool usingWheel = false;
     public float maxRpm = 300;
 
@@ -27,6 +29,8 @@ public class CarController : MonoBehaviour
 
     [SerializeField] public float Speed;
     [SerializeField] public float Braking;
+
+    [SerializeField] public Transform SteeringWheel;
 
     [Header("Wheels")]
     [SerializeField] private WheelCollider frontLeftWheelCollider;
@@ -47,6 +51,11 @@ public class CarController : MonoBehaviour
         if (GetComponent<Rigidbody>() != null && centerOfMass != null)
         {
             GetComponent<Rigidbody>().centerOfMass = centerOfMass.localPosition;
+        }
+        
+        for(int i = 0; i < transform.GetChild(0).childCount; i++)
+        {
+            transform.GetChild(0).GetChild(i).GetComponent<WheelCollider>().wheelDampingRate = StandardWheelDampeningRate;
         }
 
     }
@@ -139,10 +148,10 @@ public class CarController : MonoBehaviour
     {
         if (currentbreakForce <= 900)
         {
-            frontRightWheelCollider.wheelDampingRate = currentbreakForce;
-            frontLeftWheelCollider.wheelDampingRate = currentbreakForce;
-            rearLeftWheelCollider.wheelDampingRate = currentbreakForce;
-            rearRightWheelCollider.wheelDampingRate = currentbreakForce;
+            frontRightWheelCollider.wheelDampingRate = StandardWheelDampeningRate + currentbreakForce;
+            frontLeftWheelCollider.wheelDampingRate = StandardWheelDampeningRate +  currentbreakForce;
+            rearLeftWheelCollider.wheelDampingRate = StandardWheelDampeningRate + currentbreakForce;
+            rearRightWheelCollider.wheelDampingRate = StandardWheelDampeningRate + currentbreakForce;
 
             frontRightWheelCollider.brakeTorque = 0;
             frontLeftWheelCollider.brakeTorque = 0;
@@ -164,6 +173,11 @@ public class CarController : MonoBehaviour
         currentSteerAngle = maxSteerAngle * horizontalInput;
         frontLeftWheelCollider.steerAngle = currentSteerAngle;
         frontRightWheelCollider.steerAngle = currentSteerAngle;
+
+        float steeringVisual = horizontalInput * 450;
+        Quaternion rot = Quaternion.Euler(-90 + -steeringVisual, -90, -90);
+        SteeringWheel.localRotation = rot;
+
     }
 
     private void UpdateWheels()
