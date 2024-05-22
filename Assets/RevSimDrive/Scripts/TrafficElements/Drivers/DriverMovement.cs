@@ -18,19 +18,28 @@ public class DriverMovement : MonoBehaviour
     public Transform wheelBL;
     public Transform wheelBR;
 
-    [Header("Car Front (Transform)")]// Assign a Gameobject representing the front of the car
-    public Transform carFront;
+    [Header("Car Checks (Transform)")]// Assign a Gameobject representing the front of the car and the rightLane checkbox
+    public Transform rightCheck;
+    public Transform frontCheck;
+    public float distanceUntillBraking;
 
+    [Header("Mass")]
+    [SerializeField] Transform centerOfMass;
+
+    [Header("Motor Variables")]
     public float maxSteerAngle = 90f;
     public int MaxRPM = 300;
     private int localMaxRpm;
     public float speed = 0;
     private bool turning = false;
+    private bool stop = false;
 
     private float MovementTorque = 1;
     private int count = 0;
     private float distanceThreshold = 3;
     private float steeringSpeed = 15f;
+    private float motorMult = 1f;
+    private DriverChecks driverChecks;
 
     private List<Transform> waypoints = new List<Transform>();
 
@@ -42,39 +51,103 @@ public class DriverMovement : MonoBehaviour
         }
 
         localMaxRpm = MaxRPM;
+
+        if (GetComponent<Rigidbody>() != null && centerOfMass != null)
+        {
+            GetComponent<Rigidbody>().centerOfMass = centerOfMass.localPosition;
+        }
+
+        if (rightCheck != null)
+        {
+            driverChecks = transform.GetChild(0).GetComponent<DriverChecks>();
+        }
     }
 
     void Update()
     {
+        RaycastHit hit;
+        // Use the forward direction of the frontCheck transform
+        if (Physics.Raycast(frontCheck.position, frontCheck.forward, out hit, distanceUntillBraking))
+        {
+            motorMult = (hit.distance / distanceUntillBraking) * 0.5f;
+
+            if (motorMult <= 0.3f)
+            {
+                ApplyBrakes();
+                stop = true;
+            }
+            else
+            {
+                motorMult = 1f;
+                frontLeft.brakeTorque = 0;
+                frontRight.brakeTorque = 0;
+                backLeft.brakeTorque = 0;
+                backRight.brakeTorque = 0;
+            }
+        }
+        else
+        {
+            motorMult = 1f;
+            frontLeft.brakeTorque = 0;
+            frontRight.brakeTorque = 0;
+            backLeft.brakeTorque = 0;
+            backRight.brakeTorque = 0;
+            stop = false;
+        }
+
+        // Visualize the raycast in the Scene view during gameplay
+        Debug.DrawRay(frontCheck.position, frontCheck.forward * distanceUntillBraking, Color.red);
+
+
         if (Vector3.Distance(transform.position, waypoints[count].position) < distanceThreshold && count < waypoints.Count)
         {
             if (waypoints[count].tag == "DriveTurnPoint")
             {
                 localMaxRpm = 100;
-
-
+                turning = true;
             }
             else if (waypoints[count].tag == "DriveTurnEndPoint")
             {
                 localMaxRpm = MaxRPM;
-
+                turning = false;
             }
 
             count++;
 
             if (count >= waypoints.Count)
             {
-                Destroy(gameObject);
+                count = 0;
+                transform.position = waypoints[0].position;
+                transform.LookAt(waypoints[1]);
+            }
+        }
+
+        if (turning == true)
+        {
+            if (driverChecks.IsTriggerBoxContainingObjects() == true)
+            {
+                ApplyBrakes();
+                stop = true;
+            }
+            else
+            {
+                frontLeft.brakeTorque = 0;
+                frontRight.brakeTorque = 0;
+                backLeft.brakeTorque = 0;
+                backRight.brakeTorque = 0;
+                stop = false;
             }
         }
 
 
-
-
         UpdateWheels();
         ApplySteering(waypoints[count]);
-        Movement();
+        if (!stop) 
+        {
+            Movement();
+        }
     }
+
 
     private void ApplyBrakes() // Apply brake torque 
     {
@@ -128,21 +201,16 @@ public class DriverMovement : MonoBehaviour
 
     void Movement() // moves the car forward and backward depending on the input
     {
-        frontLeft.brakeTorque = 0;
-        frontRight.brakeTorque = 0;
-        backLeft.brakeTorque = 0;
-        backRight.brakeTorque = 0;
-
         int SpeedOfWheels = (int)((frontLeft.rpm + frontRight.rpm + backLeft.rpm + backRight.rpm) / 4);
 
-        if (SpeedOfWheels < localMaxRpm)
+        if (SpeedOfWheels < localMaxRpm * motorMult)
         {
             backRight.motorTorque = 400 * MovementTorque;
             backLeft.motorTorque = 400 * MovementTorque;
             frontRight.motorTorque = 400 * MovementTorque;
             frontLeft.motorTorque = 400 * MovementTorque;
         }
-        else if (SpeedOfWheels < localMaxRpm + (localMaxRpm * 1 / 4))
+        else if (SpeedOfWheels < (localMaxRpm + (localMaxRpm * 1 / 4) * motorMult))
         {
             backRight.motorTorque = 0;
             backLeft.motorTorque = 0;

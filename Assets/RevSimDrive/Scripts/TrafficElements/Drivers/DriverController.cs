@@ -52,6 +52,8 @@ public class DriverController : MonoBehaviour
         {
             Vector3 chosenSpawnpoint = driverWaypoints[0].position;
             GameObject driverSpawned = Instantiate(Driver, chosenSpawnpoint, Quaternion.identity, driverObjectChild);
+            driverSpawned.transform.LookAt(driverWaypoints[1].transform);
+
             drivers.Add(driverSpawned);
 
             DriverMovement driverMovement = driverSpawned.GetComponent<DriverMovement>();
