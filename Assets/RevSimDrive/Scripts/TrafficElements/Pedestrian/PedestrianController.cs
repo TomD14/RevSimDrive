@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class PedestrianController : MonoBehaviour
 {
     public GameObject pedestrian;
+    public TMP_Text counter;
+    public float count = 0;
+
+    private List<GameObject> pedestrians = new List<GameObject>();
+    private Transform pedestriansObjectChild;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        pedestriansObjectChild = transform.GetChild(transform.childCount - 1);
     }
 
     // Update is called once per frame
@@ -18,21 +25,32 @@ public class PedestrianController : MonoBehaviour
 
     }
 
+    public void DeletePedestrian()
+    {
+        if(pedestrians.Count != 0)
+        {
+            Destroy(pedestrians[pedestrians.Count - 1]);
+            pedestrians.RemoveAt(pedestrians.Count - 1);
+            count--;
+            counter.text = count.ToString();
+        }
+    }
+
     public void SpawnPedestrian()
     {
-        int randomWaypointGroup;
-        randomWaypointGroup = Random.Range(0, transform.childCount);
+        int randomWaypointGroup = Random.Range(0, transform.childCount);
 
         Debug.Log("Amount of waypoint groups = " + transform.childCount + ", Random number chosen = " + randomWaypointGroup);
 
-        int randomWaypointInsideGroup;
-        randomWaypointInsideGroup = Random.Range(0, transform.GetChild(randomWaypointGroup).childCount);
+        int randomWaypointInsideGroup = Random.Range(0, transform.GetChild(randomWaypointGroup).childCount);
 
         Debug.Log("Amount of waypoints inside chosen group = " + transform.GetChild(randomWaypointGroup).childCount + ", Random number chosen = " + randomWaypointInsideGroup);
 
         Vector3 chosenSpawnpoint = transform.GetChild(randomWaypointGroup).GetChild(randomWaypointInsideGroup).position;
 
-        GameObject pedestrianSpawned = Instantiate(pedestrian, chosenSpawnpoint, Quaternion.identity);
+        GameObject pedestrianSpawned = Instantiate(pedestrian, chosenSpawnpoint, Quaternion.identity, pedestriansObjectChild);
+
+        pedestrians.Add(pedestrianSpawned);
 
         PedestrianMovement pedMov = pedestrianSpawned.GetComponent<PedestrianMovement>();
 
@@ -49,5 +67,8 @@ public class PedestrianController : MonoBehaviour
                 j++;
             }
         }
+
+        count++;
+        counter.text = count.ToString();
     }
 }

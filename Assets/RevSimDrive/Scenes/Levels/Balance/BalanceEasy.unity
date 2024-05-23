@@ -1145,6 +1145,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1852451123516610533, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2398173174998351360, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
       propertyPath: carPlayer
       value: 

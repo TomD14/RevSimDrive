@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +17,11 @@ public class CarController : MonoBehaviour
     private float currentSteerAngle;
     private float currentbreakForce;
     private bool isBreaking;
+
+    public float StandardWheelDampeningRate;
+
     public bool usingWheel = false;
+    public float maxRpm = 300;
 
     [Header("Force controls")]
     [SerializeField] public float motorForce;
@@ -25,6 +30,8 @@ public class CarController : MonoBehaviour
 
     [SerializeField] public float Speed;
     [SerializeField] public float Braking;
+
+    [SerializeField] public Transform SteeringWheel;
 
     [Header("Wheels")]
     [SerializeField] private WheelCollider frontLeftWheelCollider;
@@ -40,11 +47,21 @@ public class CarController : MonoBehaviour
     [Header("Mass")]
     [SerializeField] Transform centerOfMass;
 
+    [Header("Speedometer")]
+    public TMP_Text speedTextMesh;
+    private Rigidbody car;
+
     private void Start()
     {
-        if (GetComponent<Rigidbody>() != null && centerOfMass != null)
+        car = GetComponent<Rigidbody>();
+        if (car != null && centerOfMass != null)
         {
-            GetComponent<Rigidbody>().centerOfMass = centerOfMass.localPosition;
+            car.centerOfMass = centerOfMass.localPosition;
+        }
+        
+        for(int i = 0; i < transform.GetChild(0).childCount; i++)
+        {
+            transform.GetChild(0).GetChild(i).GetComponent<WheelCollider>().wheelDampingRate = StandardWheelDampeningRate;
         }
 
     }
@@ -55,6 +72,14 @@ public class CarController : MonoBehaviour
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+
+        Vector3 velocity = car.velocity;
+        float speedInMetersPerSecond = velocity.magnitude;
+        float speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
+
+        int roundedSpeed = Mathf.RoundToInt(speedInKilometersPerHour);
+
+        speedTextMesh.text = roundedSpeed.ToString();
     }
 
 
@@ -70,9 +95,17 @@ public class CarController : MonoBehaviour
         }
         else
         {
-            verticalInput = Input.GetAxis(VERTICAL);
-            isBreaking = Input.GetKey(KeyCode.Space);
-            if (isBreaking == true)
+            
+            if(Input.GetKey(KeyCode.UpArrow) == true)
+            {
+                verticalInput = 1;
+            }
+            else
+            {
+                verticalInput = 0;
+            }
+
+            if (Input.GetKey(KeyCode.Space) == true)
             {
                 brakeInput = 1000;
             }
@@ -82,7 +115,6 @@ public class CarController : MonoBehaviour
             }
         }
 
-        Speed = verticalInput;
 
 
 
@@ -92,10 +124,28 @@ public class CarController : MonoBehaviour
 
     private void HandleMotor()
     {
-        frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
-        frontRightWheelCollider.motorTorque = verticalInput * motorForce;
-        rearLeftWheelCollider.motorTorque = verticalInput * motorForce;
-        rearRightWheelCollider.motorTorque = verticalInput * motorForce;
+        float SpeedOfWheels = transform.GetComponent<Rigidbody>().velocity.sqrMagnitude;
+
+        if (SpeedOfWheels < maxRpm)
+        {
+            frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
+            frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+            rearLeftWheelCollider.motorTorque = verticalInput * motorForce;
+            rearRightWheelCollider.motorTorque = verticalInput * motorForce;
+        }
+        else if (SpeedOfWheels < maxRpm + (maxRpm * 1 / 4))
+        {
+            verticalInput = 0;
+            rearRightWheelCollider.motorTorque = 0;
+            rearLeftWheelCollider.motorTorque = 0;
+            frontRightWheelCollider.motorTorque = 0;
+            frontLeftWheelCollider.motorTorque = 0;
+        }
+        else
+        {
+            ApplyBreaking();
+        }
+
         if(usingWheel == true)
         {
             currentbreakForce = brakeInput * brakeForce * 10;
@@ -105,16 +155,17 @@ public class CarController : MonoBehaviour
             currentbreakForce = brakeInput;
         }
         ApplyBreaking();
+        Speed = SpeedOfWheels;
     }
 
     private void ApplyBreaking()
     {
         if (currentbreakForce <= 900)
         {
-            frontRightWheelCollider.wheelDampingRate = currentbreakForce;
-            frontLeftWheelCollider.wheelDampingRate = currentbreakForce;
-            rearLeftWheelCollider.wheelDampingRate = currentbreakForce;
-            rearRightWheelCollider.wheelDampingRate = currentbreakForce;
+            frontRightWheelCollider.wheelDampingRate = StandardWheelDampeningRate + currentbreakForce;
+            frontLeftWheelCollider.wheelDampingRate = StandardWheelDampeningRate +  currentbreakForce;
+            rearLeftWheelCollider.wheelDampingRate = StandardWheelDampeningRate + currentbreakForce;
+            rearRightWheelCollider.wheelDampingRate = StandardWheelDampeningRate + currentbreakForce;
 
             frontRightWheelCollider.brakeTorque = 0;
             frontLeftWheelCollider.brakeTorque = 0;
@@ -123,6 +174,7 @@ public class CarController : MonoBehaviour
         }
         else
         {
+
             frontRightWheelCollider.brakeTorque = 100;
             frontLeftWheelCollider.brakeTorque = 100;
             rearLeftWheelCollider.brakeTorque = 100;
@@ -136,6 +188,11 @@ public class CarController : MonoBehaviour
         currentSteerAngle = maxSteerAngle * horizontalInput;
         frontLeftWheelCollider.steerAngle = currentSteerAngle;
         frontRightWheelCollider.steerAngle = currentSteerAngle;
+
+        float steeringVisual = horizontalInput * 450;
+        Quaternion rot = Quaternion.Euler(-90 + -steeringVisual, -90, -90);
+        SteeringWheel.localRotation = rot;
+
     }
 
     private void UpdateWheels()
