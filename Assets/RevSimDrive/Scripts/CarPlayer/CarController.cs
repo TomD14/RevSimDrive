@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,11 +47,16 @@ public class CarController : MonoBehaviour
     [Header("Mass")]
     [SerializeField] Transform centerOfMass;
 
+    [Header("Speedometer")]
+    public TMP_Text speedTextMesh;
+    private Rigidbody car;
+
     private void Start()
     {
-        if (GetComponent<Rigidbody>() != null && centerOfMass != null)
+        car = GetComponent<Rigidbody>();
+        if (car != null && centerOfMass != null)
         {
-            GetComponent<Rigidbody>().centerOfMass = centerOfMass.localPosition;
+            car.centerOfMass = centerOfMass.localPosition;
         }
         
         for(int i = 0; i < transform.GetChild(0).childCount; i++)
@@ -66,6 +72,14 @@ public class CarController : MonoBehaviour
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+
+        Vector3 velocity = car.velocity;
+        float speedInMetersPerSecond = velocity.magnitude;
+        float speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
+
+        int roundedSpeed = Mathf.RoundToInt(speedInKilometersPerHour);
+
+        speedTextMesh.text = roundedSpeed.ToString();
     }
 
 
