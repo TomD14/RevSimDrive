@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
+using System.Collections;
 
 public class CarController : MonoBehaviour
 {
@@ -15,11 +11,10 @@ public class CarController : MonoBehaviour
     private float verticalInput;
     private float brakeInput;
     private float currentSteerAngle;
-    private float currentbreakForce;
-    private bool isBreaking;
+    private float currentBrakeForce;
+    private bool isBraking;
 
     public float StandardWheelDampeningRate;
-
     public bool usingWheel = false;
     public float maxRpm = 300;
 
@@ -51,19 +46,27 @@ public class CarController : MonoBehaviour
     public TMP_Text speedTextMesh;
     private Rigidbody car;
 
+    [Header("Audio")]
+    [SerializeField] private float minPitch = 0.5f;
+    [SerializeField] private float maxPitch = 2.0f;
+    [SerializeField] private float pitchTransitionSpeed = 2.0f;
+    [SerializeField] private AudioSource accelerationAudioSource;
+    [SerializeField] private AudioSource idleAudioSource;
+    [SerializeField] private AudioSource decelerationAudioSource;
+
     private void Start()
     {
+        idleAudioSource.Play(); 
         car = GetComponent<Rigidbody>();
         if (car != null && centerOfMass != null)
         {
             car.centerOfMass = centerOfMass.localPosition;
         }
-        
-        for(int i = 0; i < transform.GetChild(0).childCount; i++)
+
+        for (int i = 0; i < transform.GetChild(0).childCount; i++)
         {
             transform.GetChild(0).GetChild(i).GetComponent<WheelCollider>().wheelDampingRate = StandardWheelDampeningRate;
         }
-
     }
 
     private void FixedUpdate()
@@ -82,105 +85,97 @@ public class CarController : MonoBehaviour
         speedTextMesh.text = roundedSpeed.ToString();
     }
 
-
     private void GetInput()
     {
         horizontalInput = Input.GetAxis(HORIZONTAL);
 
-        if (usingWheel == true)
+        if (usingWheel)
         {
             verticalInput = (Input.GetAxis("VerticalB") + 1) * 0.5f;
             brakeInput = (Input.GetAxis("Brake") + 1) * 0.5f;
-
         }
         else
         {
-            
-            if(Input.GetKey(KeyCode.UpArrow) == true)
+            if (Input.GetKey(KeyCode.UpArrow))
             {
                 verticalInput = 1;
             }
-            else
+            else if (Input.GetKey(KeyCode.DownArrow))
             {
-                verticalInput = 0;
+                verticalInput = -1;
             }
+            else verticalInput = 0;
 
-            if (Input.GetKey(KeyCode.Space) == true)
-            {
-                brakeInput = 1000;
-            }
-            else
-            {
-                brakeInput = 0;
-            }
+            brakeInput = Input.GetKey(KeyCode.Space) ? 1000 : 0;
         }
-
-
-
-
-        
     }
-
 
     private void HandleMotor()
     {
-        float SpeedOfWheels = transform.GetComponent<Rigidbody>().velocity.sqrMagnitude;
+        float SpeedOfWheels = car.velocity.sqrMagnitude;
 
         if (SpeedOfWheels < maxRpm)
         {
-            frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
-            frontRightWheelCollider.motorTorque = verticalInput * motorForce;
-            rearLeftWheelCollider.motorTorque = verticalInput * motorForce;
-            rearRightWheelCollider.motorTorque = verticalInput * motorForce;
+            SetMotorTorque(verticalInput * motorForce);
         }
         else if (SpeedOfWheels < maxRpm + (maxRpm * 1 / 4))
         {
             verticalInput = 0;
-            rearRightWheelCollider.motorTorque = 0;
-            rearLeftWheelCollider.motorTorque = 0;
-            frontRightWheelCollider.motorTorque = 0;
-            frontLeftWheelCollider.motorTorque = 0;
+            SetMotorTorque(0);
         }
         else
         {
-            ApplyBreaking();
+            ApplyBraking();
         }
 
-        if(usingWheel == true)
-        {
-            currentbreakForce = brakeInput * brakeForce * 10;
-        }
-        else
-        {
-            currentbreakForce = brakeInput;
-        }
-        ApplyBreaking();
+        currentBrakeForce = usingWheel ? brakeInput * brakeForce * 10 : brakeInput;
+        ApplyBraking();
+
         Speed = SpeedOfWheels;
+
+        // Handle audio based on input
+        HandleEngineSound();
     }
 
-    private void ApplyBreaking()
+    private void SetMotorTorque(float torque)
     {
-        if (currentbreakForce <= 900)
-        {
-            frontRightWheelCollider.wheelDampingRate = StandardWheelDampeningRate + currentbreakForce;
-            frontLeftWheelCollider.wheelDampingRate = StandardWheelDampeningRate +  currentbreakForce;
-            rearLeftWheelCollider.wheelDampingRate = StandardWheelDampeningRate + currentbreakForce;
-            rearRightWheelCollider.wheelDampingRate = StandardWheelDampeningRate + currentbreakForce;
+        frontLeftWheelCollider.motorTorque = torque;
+        frontRightWheelCollider.motorTorque = torque;
+        rearLeftWheelCollider.motorTorque = torque;
+        rearRightWheelCollider.motorTorque = torque;
+    }
 
-            frontRightWheelCollider.brakeTorque = 0;
-            frontLeftWheelCollider.brakeTorque = 0;
-            rearLeftWheelCollider.brakeTorque = 0;
-            rearRightWheelCollider.brakeTorque = 0;
+    private void ApplyBraking()
+    {
+        Braking = currentBrakeForce;
+        if (currentBrakeForce <= 900)
+        {
+            SetWheelDampingRate(StandardWheelDampeningRate + currentBrakeForce);
+            SetBrakeTorque(0);
         }
         else
         {
-
-            frontRightWheelCollider.brakeTorque = 100;
-            frontLeftWheelCollider.brakeTorque = 100;
-            rearLeftWheelCollider.brakeTorque = 100;
-            rearRightWheelCollider.brakeTorque = 100;
+            SetBrakeTorque(100);
         }
 
+        AdjustFrictionStiffness();
+
+    }
+
+    private void SetWheelDampingRate(float rate)
+    {
+        frontRightWheelCollider.wheelDampingRate = rate;
+        frontLeftWheelCollider.wheelDampingRate = rate;
+        rearLeftWheelCollider.wheelDampingRate = rate;
+        rearRightWheelCollider.wheelDampingRate = rate;
+    }
+
+    private void SetBrakeTorque(float torque)
+    {
+        frontRightWheelCollider.brakeTorque = torque;
+        frontLeftWheelCollider.brakeTorque = torque;
+        rearLeftWheelCollider.brakeTorque = torque;
+        rearRightWheelCollider.brakeTorque = torque;
     }
 
     private void HandleSteering()
@@ -192,7 +187,6 @@ public class CarController : MonoBehaviour
         float steeringVisual = horizontalInput * 450;
         Quaternion rot = Quaternion.Euler(-90 + -steeringVisual, -90, -90);
         SteeringWheel.localRotation = rot;
-
     }
 
     private void UpdateWheels()
@@ -206,9 +200,93 @@ public class CarController : MonoBehaviour
     private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
     {
         Vector3 pos;
-        Quaternion rot;       
+        Quaternion rot;
         wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
+    }
+
+    private void HandleEngineSound()
+    {
+        float carVelocityRatio = car.velocity.magnitude / maxRpm; // Assuming maxRpm is the maximum velocity
+        float targetPitch = Mathf.Lerp(minPitch, maxPitch, carVelocityRatio);
+
+        // Apply pitch to audio sources
+        accelerationAudioSource.pitch = targetPitch;
+        decelerationAudioSource.pitch = targetPitch;
+
+        // Smoothly transition between audio sources based on input
+        if (verticalInput > 0)
+        {
+            StartCoroutine(TransitionAudio(accelerationAudioSource, true));
+            StartCoroutine(TransitionAudio(decelerationAudioSource, false));
+            StartCoroutine(TransitionAudio(idleAudioSource, false));
+        }
+        else if (verticalInput == 0 && car.velocity.sqrMagnitude > 0.1)
+        {
+            StartCoroutine(TransitionAudio(accelerationAudioSource, false));
+            StartCoroutine(TransitionAudio(decelerationAudioSource, true));
+            StartCoroutine(TransitionAudio(idleAudioSource, false));
+        }
+        else
+        {
+            StartCoroutine(TransitionAudio(accelerationAudioSource, false));
+            StartCoroutine(TransitionAudio(decelerationAudioSource, false));
+            StartCoroutine(TransitionAudio(idleAudioSource, true));
+        }
+    }
+
+    private IEnumerator TransitionAudio(AudioSource audioSource, bool shouldPlay)
+    {
+        if (shouldPlay)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.loop = true; // Ensure looping
+                audioSource.Play();
+            }
+
+            while (audioSource.volume < 1f)
+            {
+                audioSource.volume += Time.deltaTime * pitchTransitionSpeed;
+                yield return null;
+            }
+        }
+        else
+        {
+            while (audioSource.volume > 0f)
+            {
+                audioSource.volume -= Time.deltaTime * pitchTransitionSpeed;
+                yield return null;
+            }
+
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+        }
+    }
+
+    private void AdjustFrictionStiffness()
+    {
+        WheelFrictionCurve forwardFrictionBase = frontLeftWheelCollider.forwardFriction;
+        forwardFrictionBase.stiffness = 1f;
+
+        WheelFrictionCurve forwardFrictionBrake = frontLeftWheelCollider.forwardFriction;
+        forwardFrictionBrake.stiffness = 6f;
+
+        if (Braking >= 900)
+        {
+
+            rearLeftWheelCollider.forwardFriction = forwardFrictionBrake;
+            rearRightWheelCollider.forwardFriction = forwardFrictionBrake;
+        }
+        else
+        {
+
+            rearLeftWheelCollider.forwardFriction = forwardFrictionBase;
+            rearRightWheelCollider.forwardFriction = forwardFrictionBase;
+        }
+
     }
 }
