@@ -8,6 +8,8 @@ TagManager:
   - TrafficLightCollider
   - DriveTurnPoint
   - DriveTurnEndPoint
+  - Border
+  - Road
   layers:
   - Default
   - TransparentFX

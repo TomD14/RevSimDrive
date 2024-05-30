@@ -289,4 +289,14 @@ public class CarController : MonoBehaviour
         }
 
     }
+
+    public void StopCar()
+    {
+        SetMotorTorque(0);
+        SetBrakeTorque(0);
+        SetWheelDampingRate(StandardWheelDampeningRate);
+
+        car.velocity = Vector3.zero;
+        car.angularVelocity = Vector3.zero;
+    }
 }
