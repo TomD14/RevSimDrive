@@ -12,7 +12,8 @@ public class CarController : MonoBehaviour
     private float brakeInput;
     private float currentSteerAngle;
     private float currentBrakeForce;
-    private bool isBraking;
+    private bool driveBackwards;
+    private float backwardsValue = 1;
 
     public float StandardWheelDampeningRate;
     public bool usingWheel = false;
@@ -76,6 +77,18 @@ public class CarController : MonoBehaviour
         HandleSteering();
         UpdateWheels();
 
+        for (int joystick = 1; joystick < 5; joystick++)
+        {
+            for (int button = 0; button < 20; button++)
+            {
+                if (Input.GetKey("joystick " + joystick + " button " + button))
+                {
+
+                    Debug.Log("joystick = " + joystick + "  button = " + button);
+                }
+            }
+        }
+
         Vector3 velocity = car.velocity;
         float speedInMetersPerSecond = velocity.magnitude;
         float speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
@@ -93,6 +106,20 @@ public class CarController : MonoBehaviour
         {
             verticalInput = (Input.GetAxis("VerticalB") + 1) * 0.5f;
             brakeInput = (Input.GetAxis("Brake") + 1) * 0.5f;
+
+
+
+
+            if (Input.GetKey("joystick 1 button 5") == true && driveBackwards == false)
+            {
+                driveBackwards = true;
+                backwardsValue = -1;
+            }
+            else if (Input.GetKey("joystick 1 button 4") == true && driveBackwards == true)
+            {
+                driveBackwards = false;
+                backwardsValue = 1;
+            }
         }
         else
         {
@@ -139,6 +166,7 @@ public class CarController : MonoBehaviour
 
     private void SetMotorTorque(float torque)
     {
+        torque = torque * backwardsValue;
         frontLeftWheelCollider.motorTorque = torque;
         frontRightWheelCollider.motorTorque = torque;
         rearLeftWheelCollider.motorTorque = torque;
