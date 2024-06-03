@@ -12,11 +12,12 @@ public class CarController : MonoBehaviour
     private float brakeInput;
     private float currentSteerAngle;
     private float currentBrakeForce;
-    private bool isBraking;
+    private bool driveBackwards;
+    private float backwardsValue = 1;
 
     public float StandardWheelDampeningRate;
     public bool usingWheel = false;
-    public float maxRpm = 300;
+    public float maxKmPH = 60;
 
     [Header("Force controls")]
     [SerializeField] public float motorForce;
@@ -44,6 +45,7 @@ public class CarController : MonoBehaviour
 
     [Header("Speedometer")]
     public TMP_Text speedTextMesh;
+    public bool canDrive = true;
     private Rigidbody car;
 
     [Header("Audio")]
@@ -71,18 +73,27 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        GetInput();
-        HandleMotor();
-        HandleSteering();
-        UpdateWheels();
+        if (canDrive == true)
+        {
+            GetInput();
+            HandleMotor();
+            HandleSteering();
+            UpdateWheels();
 
-        Vector3 velocity = car.velocity;
-        float speedInMetersPerSecond = velocity.magnitude;
-        float speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
+            for (int joystick = 1; joystick < 5; joystick++)
+            {
+                for (int button = 0; button < 20; button++)
+                {
+                    if (Input.GetKey("joystick " + joystick + " button " + button))
+                    {
 
-        int roundedSpeed = Mathf.RoundToInt(speedInKilometersPerHour);
+                        Debug.Log("joystick = " + joystick + "  button = " + button);
+                    }
+                }
+            }
+        }
 
-        speedTextMesh.text = roundedSpeed.ToString();
+        
     }
 
     private void GetInput()
@@ -93,6 +104,20 @@ public class CarController : MonoBehaviour
         {
             verticalInput = (Input.GetAxis("VerticalB") + 1) * 0.5f;
             brakeInput = (Input.GetAxis("Brake") + 1) * 0.5f;
+
+
+
+
+            if (Input.GetKey("joystick 1 button 5") == true && driveBackwards == false)
+            {
+                driveBackwards = true;
+                backwardsValue = -1;
+            }
+            else if (Input.GetKey("joystick 1 button 4") == true && driveBackwards == true)
+            {
+                driveBackwards = false;
+                backwardsValue = 1;
+            }
         }
         else
         {
@@ -112,13 +137,18 @@ public class CarController : MonoBehaviour
 
     private void HandleMotor()
     {
-        float SpeedOfWheels = car.velocity.sqrMagnitude;
+        Vector3 velocity = car.velocity;
+        float speedInMetersPerSecond = velocity.magnitude;
+        float speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
 
-        if (SpeedOfWheels < maxRpm)
+        int roundedSpeed = Mathf.RoundToInt(speedInKilometersPerHour);
+        speedTextMesh.text = roundedSpeed.ToString();
+
+        if (speedInKilometersPerHour < maxKmPH)
         {
             SetMotorTorque(verticalInput * motorForce);
         }
-        else if (SpeedOfWheels < maxRpm + (maxRpm * 1 / 4))
+        else if (speedInKilometersPerHour < maxKmPH + (maxKmPH * 1 / 4))
         {
             verticalInput = 0;
             SetMotorTorque(0);
@@ -131,14 +161,12 @@ public class CarController : MonoBehaviour
         currentBrakeForce = usingWheel ? brakeInput * brakeForce * 10 : brakeInput;
         ApplyBraking();
 
-        Speed = SpeedOfWheels;
-
-        // Handle audio based on input
         HandleEngineSound();
     }
 
     private void SetMotorTorque(float torque)
     {
+        torque = torque * backwardsValue;
         frontLeftWheelCollider.motorTorque = torque;
         frontRightWheelCollider.motorTorque = torque;
         rearLeftWheelCollider.motorTorque = torque;
@@ -208,14 +236,12 @@ public class CarController : MonoBehaviour
 
     private void HandleEngineSound()
     {
-        float carVelocityRatio = car.velocity.magnitude / maxRpm; // Assuming maxRpm is the maximum velocity
+        float carVelocityRatio = car.velocity.magnitude / maxKmPH;
         float targetPitch = Mathf.Lerp(minPitch, maxPitch, carVelocityRatio);
 
-        // Apply pitch to audio sources
         accelerationAudioSource.pitch = targetPitch;
         decelerationAudioSource.pitch = targetPitch;
 
-        // Smoothly transition between audio sources based on input
         if (verticalInput > 0)
         {
             StartCoroutine(TransitionAudio(accelerationAudioSource, true));
@@ -242,7 +268,7 @@ public class CarController : MonoBehaviour
         {
             if (!audioSource.isPlaying)
             {
-                audioSource.loop = true; // Ensure looping
+                audioSource.loop = true;
                 audioSource.Play();
             }
 
@@ -288,5 +314,15 @@ public class CarController : MonoBehaviour
             rearRightWheelCollider.forwardFriction = forwardFrictionBase;
         }
 
+    }
+
+    public void StopCar()
+    {
+        SetMotorTorque(0);
+        SetBrakeTorque(0);
+        SetWheelDampingRate(StandardWheelDampeningRate);
+
+        car.velocity = Vector3.zero;
+        car.angularVelocity = Vector3.zero;
     }
 }

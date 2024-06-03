@@ -58,6 +58,10 @@ namespace YawVR
 
         public CarController carPlayer;
 
+        public TMP_Text carToggle;
+
+        public TMP_Text maxSpeedVal;
+
 
         void Start()
         {
@@ -87,7 +91,8 @@ namespace YawVR
             //Start seacrhing for devices
             //StartCoroutine(SearchForDevices());
 
-            speedSlider.value = carPlayer.motorForce;
+            speedSlider.value = carPlayer.maxKmPH;
+            maxSpeedVal.text = carPlayer.maxKmPH.ToString();
         }
 
 
@@ -260,6 +265,19 @@ namespace YawVR
 
         }
 
+        public void HardStopCar()
+        {
+            carPlayer.StopCar();
+            carPlayer.canDrive = false;
+            carToggle.text = "Car is Stopped";
+        }
+
+        public void HardStartCar()
+        {
+            carPlayer.canDrive = true;
+            carToggle.text = "Car is Started";
+        }
+
         private bool SameDevice(YawDevice device, YawDevice toDevice)
         {
             if (device.Id == toDevice.Id && device.TCPPort == toDevice.TCPPort && device.UDPPort == toDevice.UDPPort) return true;
@@ -278,6 +296,7 @@ namespace YawVR
              rollLimitInputField.text = rollLimit.ToString();
          }
          */
+
         public void DidDisconnectFrom(YawDevice device)
         {
             ShowError("Device disconnected");
@@ -291,7 +310,10 @@ namespace YawVR
 
         public void ChangeCarSpeed()
         {
-            carPlayer.motorForce = speedSlider.value;
+            float snappedValue = Mathf.Round(speedSlider.value / 10) * 10;
+            speedSlider.value = snappedValue;
+            carPlayer.maxKmPH = snappedValue;
+            maxSpeedVal.text = snappedValue.ToString();
         }
 
         public void ChangePitchIntensity()
