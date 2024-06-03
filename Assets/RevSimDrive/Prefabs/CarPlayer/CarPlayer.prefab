@@ -2098,7 +2098,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StandardWheelDampeningRate: 25
   usingWheel: 0
-  maxRpm: 300
+  maxKmPH: 60
   motorForce: 2000
   brakeForce: 100
   maxSteerAngle: 15

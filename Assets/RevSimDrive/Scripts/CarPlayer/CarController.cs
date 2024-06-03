@@ -17,7 +17,7 @@ public class CarController : MonoBehaviour
 
     public float StandardWheelDampeningRate;
     public bool usingWheel = false;
-    public float maxRpm = 300;
+    public float maxKmPH = 60;
 
     [Header("Force controls")]
     [SerializeField] public float motorForce;
@@ -93,12 +93,7 @@ public class CarController : MonoBehaviour
             }
         }
 
-        Vector3 velocity = car.velocity;
-        float speedInMetersPerSecond = velocity.magnitude;
-        float speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
-
-        int roundedSpeed = Mathf.RoundToInt(speedInKilometersPerHour);
-        speedTextMesh.text = roundedSpeed.ToString();
+        
     }
 
     private void GetInput()
@@ -142,13 +137,18 @@ public class CarController : MonoBehaviour
 
     private void HandleMotor()
     {
-        float SpeedOfWheels = car.velocity.sqrMagnitude;
+        Vector3 velocity = car.velocity;
+        float speedInMetersPerSecond = velocity.magnitude;
+        float speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
 
-        if (SpeedOfWheels < maxRpm)
+        int roundedSpeed = Mathf.RoundToInt(speedInKilometersPerHour);
+        speedTextMesh.text = roundedSpeed.ToString();
+
+        if (speedInKilometersPerHour < maxKmPH)
         {
             SetMotorTorque(verticalInput * motorForce);
         }
-        else if (SpeedOfWheels < maxRpm + (maxRpm * 1 / 4))
+        else if (speedInKilometersPerHour < maxKmPH + (maxKmPH * 1 / 4))
         {
             verticalInput = 0;
             SetMotorTorque(0);
@@ -161,9 +161,6 @@ public class CarController : MonoBehaviour
         currentBrakeForce = usingWheel ? brakeInput * brakeForce * 10 : brakeInput;
         ApplyBraking();
 
-        Speed = SpeedOfWheels;
-
-        // Handle audio based on input
         HandleEngineSound();
     }
 
@@ -239,14 +236,12 @@ public class CarController : MonoBehaviour
 
     private void HandleEngineSound()
     {
-        float carVelocityRatio = car.velocity.magnitude / maxRpm; // Assuming maxRpm is the maximum velocity
+        float carVelocityRatio = car.velocity.magnitude / maxKmPH;
         float targetPitch = Mathf.Lerp(minPitch, maxPitch, carVelocityRatio);
 
-        // Apply pitch to audio sources
         accelerationAudioSource.pitch = targetPitch;
         decelerationAudioSource.pitch = targetPitch;
 
-        // Smoothly transition between audio sources based on input
         if (verticalInput > 0)
         {
             StartCoroutine(TransitionAudio(accelerationAudioSource, true));
@@ -273,7 +268,7 @@ public class CarController : MonoBehaviour
         {
             if (!audioSource.isPlaying)
             {
-                audioSource.loop = true; // Ensure looping
+                audioSource.loop = true;
                 audioSource.Play();
             }
 

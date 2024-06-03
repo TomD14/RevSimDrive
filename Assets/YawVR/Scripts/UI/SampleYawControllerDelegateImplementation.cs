@@ -60,6 +60,8 @@ namespace YawVR
 
         public TMP_Text carToggle;
 
+        public TMP_Text maxSpeedVal;
+
 
         void Start()
         {
@@ -89,7 +91,8 @@ namespace YawVR
             //Start seacrhing for devices
             //StartCoroutine(SearchForDevices());
 
-            speedSlider.value = carPlayer.motorForce;
+            speedSlider.value = carPlayer.maxKmPH;
+            maxSpeedVal.text = carPlayer.maxKmPH.ToString();
         }
 
 
@@ -293,6 +296,7 @@ namespace YawVR
              rollLimitInputField.text = rollLimit.ToString();
          }
          */
+
         public void DidDisconnectFrom(YawDevice device)
         {
             ShowError("Device disconnected");
@@ -306,7 +310,10 @@ namespace YawVR
 
         public void ChangeCarSpeed()
         {
-            carPlayer.motorForce = speedSlider.value;
+            float snappedValue = Mathf.Round(speedSlider.value / 10) * 10;
+            speedSlider.value = snappedValue;
+            carPlayer.maxKmPH = snappedValue;
+            maxSpeedVal.text = snappedValue.ToString();
         }
 
         public void ChangePitchIntensity()
