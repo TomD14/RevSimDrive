@@ -45,6 +45,7 @@ public class CarController : MonoBehaviour
 
     [Header("Speedometer")]
     public TMP_Text speedTextMesh;
+    public bool canDrive = true;
     private Rigidbody car;
 
     [Header("Audio")]
@@ -72,19 +73,22 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        GetInput();
-        HandleMotor();
-        HandleSteering();
-        UpdateWheels();
-
-        for (int joystick = 1; joystick < 5; joystick++)
+        if (canDrive == true)
         {
-            for (int button = 0; button < 20; button++)
-            {
-                if (Input.GetKey("joystick " + joystick + " button " + button))
-                {
+            GetInput();
+            HandleMotor();
+            HandleSteering();
+            UpdateWheels();
 
-                    Debug.Log("joystick = " + joystick + "  button = " + button);
+            for (int joystick = 1; joystick < 5; joystick++)
+            {
+                for (int button = 0; button < 20; button++)
+                {
+                    if (Input.GetKey("joystick " + joystick + " button " + button))
+                    {
+
+                        Debug.Log("joystick = " + joystick + "  button = " + button);
+                    }
                 }
             }
         }
@@ -94,7 +98,6 @@ public class CarController : MonoBehaviour
         float speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
 
         int roundedSpeed = Mathf.RoundToInt(speedInKilometersPerHour);
-
         speedTextMesh.text = roundedSpeed.ToString();
     }
 

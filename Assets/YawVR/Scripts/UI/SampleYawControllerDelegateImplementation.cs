@@ -58,6 +58,8 @@ namespace YawVR
 
         public CarController carPlayer;
 
+        public TMP_Text carToggle;
+
 
         void Start()
         {
@@ -258,6 +260,19 @@ namespace YawVR
             }
 
 
+        }
+
+        public void HardStopCar()
+        {
+            carPlayer.StopCar();
+            carPlayer.canDrive = false;
+            carToggle.text = "Car is Stopped";
+        }
+
+        public void HardStartCar()
+        {
+            carPlayer.canDrive = true;
+            carToggle.text = "Car is Started";
         }
 
         private bool SameDevice(YawDevice device, YawDevice toDevice)

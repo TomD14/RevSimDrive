@@ -78,14 +78,15 @@ public class RoadChecker : MonoBehaviour
             }
         }
 
-        // Start fade in
         yield return StartCoroutine(screenFader.FadeIn());
 
         carController.StopCar();
         carPlayer.transform.position = closestPoint.position;
         carPlayer.transform.LookAt(closestPointTowardsPoint.position);
+        carController.canDrive = false;
+        yield return new WaitForSeconds(1);
 
-        // Start fade out
         yield return StartCoroutine(screenFader.FadeOut());
+        carController.canDrive = true;
     }
 }
