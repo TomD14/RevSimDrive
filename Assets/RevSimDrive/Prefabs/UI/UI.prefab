@@ -1333,10 +1333,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2398173174998351360}
-        m_TargetAssemblyTypeName: YawVR.SampleYawControllerDelegateImplementation,
-          Assembly-CSharp
-        m_MethodName: HardStopCar
+      - m_Target: {fileID: 4255869526165774250}
+        m_TargetAssemblyTypeName: ScreenFader, Assembly-CSharp
+        m_MethodName: UnBlackOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1751,10 +1750,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2398173174998351360}
-        m_TargetAssemblyTypeName: YawVR.SampleYawControllerDelegateImplementation,
-          Assembly-CSharp
-        m_MethodName: HardStartCar
+      - m_Target: {fileID: 4255869526165774250}
+        m_TargetAssemblyTypeName: ScreenFader, Assembly-CSharp
+        m_MethodName: BlackOut
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5170,6 +5168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeImage: {fileID: 1315136472921088072}
   fadeDuration: 0.5
+  blindText: {fileID: 6658826442597781815}
 --- !u!1 &8975371770119678380
 GameObject:
   m_ObjectHideFlags: 0

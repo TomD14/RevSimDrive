@@ -1,15 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class ScreenFader : MonoBehaviour
 {
     public Image fadeImage;
     public float fadeDuration = 1f;
+    public TMP_Text blindText;
 
     private void Start()
     {
         fadeImage.color = new Color(0, 0, 0, 0);
+    }
+
+    public void BlackOut()
+    {
+        StartCoroutine(FadeIn());
+        blindText.text = "Player is blind";
+    }
+    public void UnBlackOut()
+    {
+        StartCoroutine(FadeOut());
+        blindText.text = "Player can see";
     }
 
     public IEnumerator FadeIn()
