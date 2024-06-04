@@ -961,6 +961,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fed3dacc0cf3f2749a06c1395810f6a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!20 &741512960 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7665395219377500909, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
+  m_PrefabInstance: {fileID: 741512958}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &765387711
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1353,6 +1358,14 @@ PrefabInstance:
     - target: {fileID: 357909643969389018, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 373043435524658910, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 741512960}
+    - target: {fileID: 373043435524658910, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
+      propertyPath: m_PlaneDistance
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 1814087398881384354, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
       propertyPath: m_AnchorMax.y
