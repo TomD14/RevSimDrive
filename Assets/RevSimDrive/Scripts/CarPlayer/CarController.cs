@@ -55,14 +55,13 @@ public class CarController : MonoBehaviour
     [SerializeField] private AudioSource idleAudioSource;
     [SerializeField] private AudioSource decelerationAudioSource;
 
-    private Transform playerCam;
+    [SerializeField]
+    public Transform playerCam;
     public float yPosCam = 0.1f;
     public float zPosCam = 0.1f;
 
     private void Start()
     {
-        playerCam = transform.GetChild(transform.childCount - 1).GetChild(0);
-
         yPosCam = playerCam.localPosition.y;
         zPosCam = playerCam.localPosition.z;
 
