@@ -39,6 +39,11 @@ namespace YawVR
         [SerializeField]
         private Slider speedSlider;
 
+        [SerializeField]
+        public Slider YPlayerSlider;
+        [SerializeField]
+        public Slider ZPlayerSlider;
+
         //DeviceDiscovery deviceDiscovery = new DeviceDiscovery();
         private int? udpPort = 50010;
         private int? tcpPort;
@@ -62,6 +67,9 @@ namespace YawVR
 
         public TMP_Text maxSpeedVal;
 
+        private Camera playerCam;
+
+        private bool onceTry = false;
 
         void Start()
         {
@@ -93,6 +101,8 @@ namespace YawVR
 
             speedSlider.value = carPlayer.maxKmPH;
             maxSpeedVal.text = carPlayer.maxKmPH.ToString();
+
+            
         }
 
 
@@ -107,6 +117,15 @@ namespace YawVR
             Debug.Log("DEVICE STARTED FROM CONFIGAPP");
         }
 
+        public void ChangeYPlayer()
+        {
+            carPlayer.MoveCamera("Y", YPlayerSlider.value);
+        }
+
+        public void ChangeZPlayer()
+        {
+            carPlayer.MoveCamera("Z", ZPlayerSlider.value);
+        }
 
         private void OnDestroy()
         {
@@ -135,7 +154,17 @@ namespace YawVR
             }
         }
 
+        private void Update()
+        {
+            // To ensure this is called after the creation of the carplayer, the slider values of the player position are called once in the update
+            if (onceTry == false)
+            {
+                YPlayerSlider.value = carPlayer.yPosCam;
+                ZPlayerSlider.value = carPlayer.zPosCam;
+                onceTry = true;
+            }
 
+        }
         void UDPPortInputFieldTextDidChange(InputField inputField)
         {
             //   availableDevices.Clear();
