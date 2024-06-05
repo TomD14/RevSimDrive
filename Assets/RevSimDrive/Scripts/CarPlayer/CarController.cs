@@ -5,7 +5,6 @@ using System.Collections;
 public class CarController : MonoBehaviour
 {
     private const string HORIZONTAL = "Horizontal";
-    private const string VERTICAL = "Vertical";
 
     private float horizontalInput;
     private float verticalInput;
@@ -56,8 +55,19 @@ public class CarController : MonoBehaviour
     [SerializeField] private AudioSource idleAudioSource;
     [SerializeField] private AudioSource decelerationAudioSource;
 
+    private Transform playerCam;
+    public float yPosCam = 0.1f;
+    public float zPosCam = 0.1f;
+
     private void Start()
     {
+        playerCam = transform.GetChild(transform.childCount - 1).GetChild(0);
+
+        yPosCam = playerCam.localPosition.y;
+        zPosCam = playerCam.localPosition.z;
+
+        Debug.Log("Y = " + yPosCam + " And Z = " + zPosCam);
+
         idleAudioSource.Play(); 
         car = GetComponent<Rigidbody>();
         if (car != null && centerOfMass != null)
@@ -94,6 +104,25 @@ public class CarController : MonoBehaviour
         }
 
         
+    }
+
+    public void MoveCamera(string Axis, float Amount)
+    {
+        if (Axis == "Y")
+        {
+            Vector3 newPosition = playerCam.transform.localPosition;
+            newPosition.y = Amount;
+            playerCam.localPosition = newPosition;
+            Debug.Log("Y changed to = " + newPosition.y);
+        }
+
+        if (Axis == "Z")
+        {
+            Vector3 newPosition = playerCam.transform.localPosition;
+            newPosition.z = Amount;
+            playerCam.localPosition = newPosition;
+            Debug.Log("Z changed to = " + newPosition.z);
+        }
     }
 
     private void GetInput()
