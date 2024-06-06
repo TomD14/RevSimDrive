@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 3e56423e1fe71f94ea97f5bb2004a7e6, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.8103394, g: 0.8514762, b: 0.98432225, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -855,10 +855,6 @@ PrefabInstance:
       propertyPath: SpawnPointsParent
       value: 
       objectReference: {fileID: 362219250}
-    - target: {fileID: 1587445724633330384, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
-      propertyPath: m_Mass
-      value: 5000
-      objectReference: {fileID: 0}
     - target: {fileID: 2219478089935861614, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.75
@@ -882,18 +878,6 @@ PrefabInstance:
     - target: {fileID: 7200739277760766874, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
       propertyPath: m_Name
       value: CarPlayer
-      objectReference: {fileID: 0}
-    - target: {fileID: 8566152859944151102, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8566152859944151102, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8566152859944151102, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8566152859944151102, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
       propertyPath: m_LocalPosition.x
@@ -934,10 +918,6 @@ PrefabInstance:
     - target: {fileID: 8566152859944151102, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8566152859944151102, guid: 80237f2a3d9177746bbe57d343ac8760, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1300,11 +1280,19 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2166267419943607897, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2398173174998351360, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
       propertyPath: carPlayer
       value: 
       objectReference: {fileID: 741512959}
     - target: {fileID: 3897423009374872403, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935816979796363089, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
@@ -1357,6 +1345,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6419829087600563585, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6804116102025242174, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6847527321744658495, guid: 6b2195fbf1d90e04ab78e1ef662067b8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}

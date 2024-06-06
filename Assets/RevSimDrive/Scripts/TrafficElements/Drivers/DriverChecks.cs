@@ -29,8 +29,8 @@ public class DriverChecks : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Debug.Log("aids");
             objectsInTrigger.Add(other.gameObject);
+            Debug.Log("added player");
         }
     }
 
@@ -40,6 +40,7 @@ public class DriverChecks : MonoBehaviour
         if (other.tag == "Player")
         {
             objectsInTrigger.Remove(other.gameObject);
+            Debug.Log("removed player");
         }
     }
 }

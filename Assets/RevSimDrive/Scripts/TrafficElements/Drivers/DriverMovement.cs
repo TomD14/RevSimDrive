@@ -6,19 +6,19 @@ public class DriverMovement : MonoBehaviour
 {
     public Transform waypointParent;
 
-    [Header("Car Wheels (Wheel Collider)")]// Assign wheel Colliders through the inspector
+    [Header("Car Wheels (Wheel Collider)")]
     public WheelCollider frontLeft;
     public WheelCollider frontRight;
     public WheelCollider backLeft;
     public WheelCollider backRight;
 
-    [Header("Car Wheels (Transform)")]// Assign wheel Transform(Mesh render) through the inspector
+    [Header("Car Wheels (Transform)")]
     public Transform wheelFL;
     public Transform wheelFR;
     public Transform wheelBL;
     public Transform wheelBR;
 
-    [Header("Car Checks (Transform)")]// Assign a Gameobject representing the front of the car and the rightLane checkbox
+    [Header("Car Checks (Transform)")]
     public Transform rightCheck;
     public Transform frontCheck;
     public float distanceUntillBraking;
@@ -39,12 +39,26 @@ public class DriverMovement : MonoBehaviour
     private float distanceThreshold = 3;
     private float steeringSpeed = 15f;
     private float motorMult = 1f;
-    private DriverChecks driverChecks;
+    public DriverChecks driverChecks;
 
     private List<Transform> waypoints = new List<Transform>();
+    private Rigidbody driver;
+
+    private bool accelerating;
+
+    private float maxKmPH = 60f;
+
+    [Header("Audio")]
+    [SerializeField] private float minPitch = 0.5f;
+    [SerializeField] private float maxPitch = 2.0f;
+    [SerializeField] private float pitchTransitionSpeed = 2.0f;
+    [SerializeField] private AudioSource accelerationAudioSource;
+    [SerializeField] private AudioSource idleAudioSource;
+    [SerializeField] private AudioSource decelerationAudioSource;
 
     void Start()
     {
+        driver = transform.GetComponent<Rigidbody>();
         for (int i = 0; i < waypointParent.childCount; i++)
         {
             waypoints.Add(waypointParent.GetChild(i));
@@ -56,17 +70,11 @@ public class DriverMovement : MonoBehaviour
         {
             GetComponent<Rigidbody>().centerOfMass = centerOfMass.localPosition;
         }
-
-        if (rightCheck != null)
-        {
-            driverChecks = transform.GetChild(0).GetComponent<DriverChecks>();
-        }
     }
 
     void Update()
     {
         RaycastHit hit;
-        // Use the forward direction of the frontCheck transform
         if (Physics.Raycast(frontCheck.position, frontCheck.forward, out hit, distanceUntillBraking))
         {
             motorMult = (hit.distance / distanceUntillBraking) * 0.5f;
@@ -95,7 +103,6 @@ public class DriverMovement : MonoBehaviour
             stop = false;
         }
 
-        // Visualize the raycast in the Scene view during gameplay
         Debug.DrawRay(frontCheck.position, frontCheck.forward * distanceUntillBraking, Color.red);
 
 
@@ -146,10 +153,11 @@ public class DriverMovement : MonoBehaviour
         {
             Movement();
         }
+        HandleEngineSound();
     }
 
 
-    private void ApplyBrakes() // Apply brake torque 
+    private void ApplyBrakes() 
     {
         frontLeft.brakeTorque = 5000;
         frontRight.brakeTorque = 5000;
@@ -158,7 +166,7 @@ public class DriverMovement : MonoBehaviour
     }
 
 
-    private void UpdateWheels() // Updates the wheel's postion and rotation
+    private void UpdateWheels() 
     {
         ApplyRotationAndPostion(frontLeft, wheelFL);
         ApplyRotationAndPostion(frontRight, wheelFR);
@@ -166,7 +174,7 @@ public class DriverMovement : MonoBehaviour
         ApplyRotationAndPostion(backRight, wheelBR);
     }
 
-    private void ApplyRotationAndPostion(WheelCollider targetWheel, Transform wheel) // Updates the wheel's postion and rotation
+    private void ApplyRotationAndPostion(WheelCollider targetWheel, Transform wheel) 
     {
         targetWheel.ConfigureVehicleSubsteps(5, 12, 15);
 
@@ -177,29 +185,25 @@ public class DriverMovement : MonoBehaviour
         wheel.rotation = rot;
     }
 
-    void ApplySteering(Transform nextDest) // Applies steering to the Current waypoint
+    void ApplySteering(Transform nextDest) 
     {
         Vector3 targetPosition = nextDest.position;
         Vector3 direction = targetPosition - transform.position;
-        direction.y = 0; // Keep the car on the same plane as the target
+        direction.y = 0; 
 
         Quaternion targetRotation = Quaternion.LookRotation(direction);
 
-        // Smoothly rotate the car towards the target
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * steeringSpeed);
 
-        // Calculate the angle difference between current forward direction and target direction
         float angle = Vector3.SignedAngle(transform.forward, direction.normalized, Vector3.up);
 
-        // Clamp the angle within the maximum steer angle
         angle = Mathf.Clamp(angle, -maxSteerAngle, maxSteerAngle);
 
-        // Apply the angle to the front wheels
         frontLeft.steerAngle = angle;
         frontRight.steerAngle = angle;
     }
 
-    void Movement() // moves the car forward and backward depending on the input
+    void Movement() 
     {
         int SpeedOfWheels = (int)((frontLeft.rpm + frontRight.rpm + backLeft.rpm + backRight.rpm) / 4);
 
@@ -209,6 +213,7 @@ public class DriverMovement : MonoBehaviour
             backLeft.motorTorque = 400 * MovementTorque;
             frontRight.motorTorque = 400 * MovementTorque;
             frontLeft.motorTorque = 400 * MovementTorque;
+            accelerating = true;
         }
         else if (SpeedOfWheels < (localMaxRpm + (localMaxRpm * 1 / 4) * motorMult))
         {
@@ -216,11 +221,72 @@ public class DriverMovement : MonoBehaviour
             backLeft.motorTorque = 0;
             frontRight.motorTorque = 0;
             frontLeft.motorTorque = 0;
+            accelerating = false;
         }
         else
             ApplyBrakes();
 
         speed = SpeedOfWheels;
 
+
+    }
+
+    private IEnumerator TransitionAudio(AudioSource audioSource, bool shouldPlay)
+    {
+        if (shouldPlay)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+
+            while (audioSource.volume < 1f)
+            {
+                audioSource.volume += Time.deltaTime * pitchTransitionSpeed;
+                yield return null;
+            }
+        }
+        else
+        {
+            while (audioSource.volume > 0f)
+            {
+                audioSource.volume -= Time.deltaTime * pitchTransitionSpeed;
+                yield return null;
+            }
+
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+        }
+    }
+
+    private void HandleEngineSound()
+    {
+        float carVelocityRatio = driver.velocity.magnitude / maxKmPH;
+        float targetPitch = Mathf.Lerp(minPitch, maxPitch, carVelocityRatio);
+
+        accelerationAudioSource.pitch = targetPitch;
+        decelerationAudioSource.pitch = targetPitch;
+
+        if (accelerating)
+        {
+            StartCoroutine(TransitionAudio(accelerationAudioSource, true));
+            StartCoroutine(TransitionAudio(decelerationAudioSource, false));
+            StartCoroutine(TransitionAudio(idleAudioSource, false));
+        }
+        else if (!accelerating && driver.velocity.magnitude >= 0.1)
+        {
+            StartCoroutine(TransitionAudio(accelerationAudioSource, false));
+            StartCoroutine(TransitionAudio(decelerationAudioSource, true));
+            StartCoroutine(TransitionAudio(idleAudioSource, false));
+        }
+        else if (driver.velocity.magnitude < 0.1)
+        {
+            StartCoroutine(TransitionAudio(accelerationAudioSource, false));
+            StartCoroutine(TransitionAudio(decelerationAudioSource, false));
+            StartCoroutine(TransitionAudio(idleAudioSource, true));
+        }
     }
 }
