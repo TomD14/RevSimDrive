@@ -43,5 +43,10 @@ public class CatRoadCheck : MonoBehaviour
     {
         animator.SetTrigger("Idle");
         isWalking = false;
+        Vector3 newPosition = transform.position - transform.forward * 0.2f;
+        transform.position = newPosition;
+
+        Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles + Vector3.up * 180);
+        transform.rotation = targetRotation;
     }
 }
