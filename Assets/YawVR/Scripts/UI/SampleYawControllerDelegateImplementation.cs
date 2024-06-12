@@ -43,6 +43,8 @@ namespace YawVR
         public Slider YPlayerSlider;
         [SerializeField]
         public Slider ZPlayerSlider;
+        [SerializeField]
+        public RectTransform CarSeat;
 
         //DeviceDiscovery deviceDiscovery = new DeviceDiscovery();
         private int? udpPort = 50010;
@@ -67,7 +69,8 @@ namespace YawVR
 
         public TMP_Text maxSpeedVal;
 
-        private Camera playerCam;
+        private float carSeatX;
+        private float carSeatY;
 
         private bool onceTry = false;
 
@@ -89,6 +92,8 @@ namespace YawVR
             rollSlider.value = YawController.Instance().RotationMultiplier.x;
             pitchSlider.value = YawController.Instance().RotationMultiplier.z;
 
+            carSeatY = CarSeat.transform.localPosition.y;
+            carSeatX = CarSeat.transform.localPosition.x;
 
             //Set self to delegate, to recieve DidFoundDevice(:) method calls from YAWController
             YawController.Instance().ControllerDelegate = this;
@@ -101,8 +106,6 @@ namespace YawVR
 
             speedSlider.value = carPlayer.maxKmPH;
             maxSpeedVal.text = carPlayer.maxKmPH.ToString();
-
-            
         }
 
 
@@ -120,11 +123,15 @@ namespace YawVR
         public void ChangeYPlayer()
         {
             carPlayer.MoveCamera("Y", YPlayerSlider.value);
+            float yPos = YPlayerSlider.value * 90;
+            CarSeat.anchoredPosition = new Vector2(CarSeat.anchoredPosition.x, carSeatY + yPos);
         }
 
         public void ChangeZPlayer()
         {
             carPlayer.MoveCamera("Z", ZPlayerSlider.value);
+            float xPos = ZPlayerSlider.value * 120;
+            CarSeat.localPosition = new Vector2(carSeatX + xPos , CarSeat.anchoredPosition.y);
         }
 
         private void OnDestroy()
